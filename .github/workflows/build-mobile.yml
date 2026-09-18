@@ -64,8 +64,17 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Configure Android SDK
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > android/local.properties
+          if [ -f "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" ]; then
+            yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses || true
+          elif [ -f "$ANDROID_HOME/tools/bin/sdkmanager" ]; then
+            yes | "$ANDROID_HOME/tools/bin/sdkmanager" --licenses || true
+          fi
 
       - name: Install Dependencies
         run: npm ci
