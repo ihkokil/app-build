@@ -1,0 +1,103 @@
+.navBar {
+  display: none; /* Hidden on desktop */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: var(--surface-nav);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--surface-card-border);
+  padding: 6px 16px;
+  padding-bottom: max(8px, var(--safe-bottom));
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.navContainer {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: relative;
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  color: var(--text-muted);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  flex: 1;
+}
+
+.navItem:hover {
+  color: var(--text-primary);
+}
+
+.active {
+  color: var(--primary);
+}
+
+.iconWrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.badgeDot {
+  position: absolute;
+  top: -2px;
+  right: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--danger);
+  box-shadow: 0 0 6px var(--danger);
+}
+
+.label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.fabWrapper {
+  position: relative;
+  top: -18px;
+  flex-shrink: 0;
+  padding: 0 8px;
+}
+
+.fab {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, #a855f7 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px 0 var(--primary-glow);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: 3px solid var(--bg-main);
+}
+
+.fab:active {
+  transform: scale(0.92);
+}
+
+.fabIcon {
+  stroke-width: 2.5;
+}
+
+@media (max-width: 768px) {
+  .navBar {
+    display: block;
+  }
+}

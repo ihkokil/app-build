@@ -1,0 +1,22 @@
+.appWrapper {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  padding: 24px 16px 80px 16px; /* 80px bottom space for mobile navigation bar */
+}
+
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+@media (min-width: 769px) {
+  .main {
+    padding: 32px 24px 48px 24px;
+  }
+}

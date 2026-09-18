@@ -1,0 +1,190 @@
+.dashboardCard {
+  background: var(--surface-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--surface-card-border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 24px;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboardCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), #ec4899, transparent);
+  opacity: 0.8;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.progressRingWrapper {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+}
+
+.progressSvg {
+  transform: rotate(-90deg);
+}
+
+.progressBg {
+  fill: none;
+  stroke: var(--surface-card-border);
+}
+
+.progressBar {
+  fill: none;
+  stroke: url(#progressGradient) var(--primary);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.8s var(--ease-snappy);
+}
+
+.progressTextCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.progressValue {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.progressLabel {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+
+.statsInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.motivationalMessage {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+}
+
+.tilesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.statTile {
+  background: var(--surface-input);
+  border: 1px solid var(--surface-card-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.statTile:hover {
+  border-color: var(--surface-card-border-hover);
+  transform: translateY(-1px);
+}
+
+.tileIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tileIconTotal {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.tileIconSuccess {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.tileIconUrgent {
+  background: var(--danger-light);
+  color: var(--danger);
+}
+
+.tileIconFlame {
+  background: rgba(236, 72, 153, 0.12);
+  color: #ec4899;
+}
+
+.tileNumber {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.tileLabel {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .dashboardCard {
+    padding: 16px;
+    margin-bottom: 18px;
+  }
+
+  .content {
+    gap: 16px;
+  }
+
+  .tilesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .statsInfo {
+    width: 100%;
+  }
+
+  .motivationalMessage {
+    margin-bottom: 12px;
+    font-size: 0.88rem;
+  }
+}
