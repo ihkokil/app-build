@@ -133,7 +133,7 @@ jobs:
         run: |
           cd ios/App
           xcodebuild -scheme App \
-            -workspace App.xcworkspace \
+            -project App.xcodeproj \
             -configuration Debug \
             -destination 'generic/platform=iOS Simulator' \
             -derivedDataPath build \
@@ -204,7 +204,7 @@ jobs:
             4. Launch **OmniTask**!
 
             ### iOS Development:
-            Open `ios/App/App.xcworkspace` in Xcode on macOS, select your development team, and press **Run** on your iPhone or Simulator.
+            Open `ios/App/App.xcodeproj` in Xcode on macOS, select your development team, and press **Run** on your iPhone or Simulator.
           files: release-output/*
           draft: false
           prerelease: false
