@@ -109,20 +109,70 @@ jobs:
           path: ${{ steps.apk-prep.outputs.apk_path }}
           retention-days: 14
 
+  build-ios:
+    name: 🍏 Build iOS (Xcode)
+    needs: validate
+    runs-on: macos-15
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Web Assets & Sync Capacitor
+        run: npm run cap:sync
+
+      - name: Build iOS App with Xcode
+        run: |
+          cd ios/App
+          xcodebuild -scheme App \
+            -workspace App.xcworkspace \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build \
+            clean build CODE_SIGNING_ALLOWED=NO
+
+      - name: Package iOS Debug Build
+        id: ios-prep
+        run: |
+          VERSION="${{ github.ref_name }}"
+          if [[ -z "$VERSION" || "$VERSION" == "main" || "$VERSION" == "master" ]]; then
+            VERSION="${{ inputs.version || 'dev' }}"
+          fi
+          mkdir -p release-output
+          cd ios/App/build/Build/Products/Debug-iphonesimulator
+          zip -r ../../../../../release-output/OmniTask-iOS-Simulator-${VERSION}.zip App.app
+          cd ../../../../../
+          echo "ios_path=release-output/OmniTask-iOS-Simulator-${VERSION}.zip" >> $GITHUB_OUTPUT
+
+      - name: Upload iOS App Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OmniTask-iOS-App
+          path: ${{ steps.ios-prep.outputs.ios_path }}
+          retention-days: 14
+
   create-release:
     name: 🚀 Publish GitHub Release
-    needs: build-android
+    needs: [build-android, build-ios]
     if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.create_release == true)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Download Built APK Artifact
+      - name: Download Built Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: OmniTask-Android-APK
           path: release-output
+          merge-multiple: true
 
       - name: Determine Version Tag
         id: release-tag
@@ -142,16 +192,20 @@ jobs:
             ## 📱 OmniTask Mobile Release (${{ steps.release-tag.outputs.tag }})
 
             ### What's Included:
-            - **Mobile-First UI**: Responsive design with bottom navigation, centered Floating Action Button, and bottom-sheet task dialogs.
+            - **Cross-Platform Mobile UI**: Responsive design with bottom navigation, centered Floating Action Button, and bottom-sheet task dialogs.
             - **Remote MySQL Persistence**: Connected to remote Hostinger MariaDB/MySQL with dual-engine zero-downtime fallback.
-            - **Downloadable APK**: Install directly onto any Android device (Android 7.0+ / API 24+).
+            - **Android APK**: Install directly onto any Android device (Android 7.0+ / API 24+).
+            - **iOS App**: Xcode project & iOS Simulator build bundle.
 
             ### How to Install on Android:
             1. Download the `.apk` file below directly to your phone.
             2. Tap the downloaded file in your notifications or Downloads folder.
             3. If prompted, allow "Install Unknown Apps" for your browser/files app.
             4. Launch **OmniTask**!
-          files: release-output/*.apk
+
+            ### iOS Development:
+            Open `ios/App/App.xcworkspace` in Xcode on macOS, select your development team, and press **Run** on your iPhone or Simulator.
+          files: release-output/*
           draft: false
           prerelease: false
         env:
