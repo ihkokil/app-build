@@ -146,10 +146,9 @@ jobs:
           if [[ -z "$VERSION" || "$VERSION" == "main" || "$VERSION" == "master" ]]; then
             VERSION="${{ inputs.version || 'dev' }}"
           fi
-          mkdir -p release-output
+          mkdir -p "$GITHUB_WORKSPACE/release-output"
           cd ios/App/build/Build/Products/Debug-iphonesimulator
-          zip -r ../../../../../release-output/OmniTask-iOS-Simulator-${VERSION}.zip App.app
-          cd ../../../../../
+          zip -r "$GITHUB_WORKSPACE/release-output/OmniTask-iOS-Simulator-${VERSION}.zip" App.app
           echo "ios_path=release-output/OmniTask-iOS-Simulator-${VERSION}.zip" >> $GITHUB_OUTPUT
 
       - name: Upload iOS App Artifact
